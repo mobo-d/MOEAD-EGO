@@ -6,8 +6,7 @@ Open-source implementations for methods presented in the following papers:
 
 * **L. Zhao and Q. Zhang. Exact Formulas  for the Computation of Expected  Tchebycheff Improvement. Proceedings of the IEEE Congress on Evolutionary  Computation, 2023.** <br/>
 
-
-Our implementation of MOEA/D-EGO differs slightly from the original in two aspects:
+The Official Code of MOEA/D-EGO can be found in this [website](https://sites.google.com/view/moead/resources). Our implementation of MOEA/D-EGO differs slightly from the original in two aspects:
 
 * The FuzzyCM is removed. FuzzyCM is an approximation  method  for GP modeling. It could  reduce the computational time when training the GP models. However, MOEA/D-EGO without FuzzyCM could perform better  in terms of solution quality.  Interested readers can find more related discussions in Section VII-E of [MOEA/D-EGO](https://ieeexplore.ieee.org/abstract/document/5353656). 
 
