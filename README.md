@@ -6,20 +6,21 @@ Open-source implementations for methods presented in the following papers:
 
 * **L. Zhao and Q. Zhang. Exact Formulas  for the Computation of Expected  Tchebycheff Improvement. Proceedings of the IEEE Congress on Evolutionary  Computation, 2023.** <br/>
 
-The Official Code of MOEA/D-EGO can be found in this [website](https://sites.google.com/view/moead/resources). Our implementation differs slightly from the Official Code in two aspects:
+The Official Code of MOEA/D-EGO can be found in [this website](https://sites.google.com/view/moead/resources). Our implementation differs slightly from the Official Code in two aspects:
 
 * The FuzzyCM is removed. FuzzyCM is an approximation  method  for GP modeling. It could  reduce the computational time when training the GP models. However, MOEA/D-EGO without FuzzyCM could perform better  in terms of solution quality.  Interested readers can find more related discussions in Section VII-E of [MOEA/D-EGO](https://ieeexplore.ieee.org/abstract/document/5353656). 
 
-* An adaptive adjustment strategy for $z^*$ is used. More related discussions can be found in the [Supplementary File of DirHV-EGO](https://ieeexplore.ieee.org/document/10093980). 
+* An adaptive adjustment strategy for $z^*$ is used. More related discussions can be found in the [Supplementary File of DirHV-EGO](https://ieeexplore.ieee.org/document/10093980).  
 
 ## Quick Start
 
-* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.1, Matlab 2021b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
-* Copy the folders named "**MOEA/D-EGO**" and "**dace-does**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path .
+* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.2, Matlab 2020b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
+* Copy the folders named "**MOEA-D-EGO**" and "**dace-does**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path .
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
-* Select the label "**expensive**" and choose the algorithm **"MOEA/D-EGO"**.
+* Select the label "**expensive**" and choose the algorithm **"MOEA-D-EGO"**.
   * Default setting of `batch size q`: 5.
   * Default setting of `maxIter`: 50. 
+  * If 'C0=0', the number of initial samples is set as 11*D-1. 
 * Select a problem and set appropriate parameters.
   * e.g., ZDT1, N=200, M=2, D=8, maxFE=200.
   * e.g., Inverted DTLZ2,  N=210, M=3, D=6, maxFE=300.
