@@ -1,9 +1,9 @@
 classdef MOEADEGO < ALGORITHM
-% <multi> <real> <expensive>
+% <multi/many> <real> <expensive>
 % MOEA/D with efficient global optimization
 % q    ---   5 --- Batch size (# of function evaluations at each generation)
 % maxIter --- 50 --- The maximum number of iterations in inner optimization
- 
+% C0   ---   0  --- Number of initial samples. Default setting: 11D-1.  
 
 
 %------------------------------- Reference --------------------------------
@@ -25,8 +25,10 @@ classdef MOEADEGO < ALGORITHM
     methods
         function main(Algorithm,Problem)
            %% Parameter setting
-            [q,maxIter] = Algorithm.ParameterSet(5,50);
-            C0 = 11*Problem.D-1; % number of initial design points
+            [q,maxIter,C0] = Algorithm.ParameterSet(5,50,0);
+            if C0 == 0
+                C0 = 11*Problem.D-1; % number of initial samples
+            end
             
            %% Initial hyperparameters for GP
             GPModels = cell(1,Problem.M);   theta = cell(1,Problem.M);
