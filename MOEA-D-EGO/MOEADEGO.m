@@ -2,9 +2,6 @@ classdef MOEADEGO < ALGORITHM
 % <multi/many> <real> <expensive>
 % MOEA/D with efficient global optimization
 % q    ---   5 --- Batch size (# of function evaluations at each generation)
-% maxIter --- 50 --- The maximum number of iterations in inner optimization
-% C0   ---   0  --- Number of initial samples. Default setting: 11D-1.  
-
 
 %------------------------------- Reference --------------------------------
 % Q. Zhang, W. Liu, E. Tsang, and B. Virginas, Expensive multiobjective
@@ -19,16 +16,14 @@ classdef MOEADEGO < ALGORITHM
 % Computational Intelligence Magazine, 2017, 12(4): 73-87".
 %--------------------------------------------------------------------------
 
-% This function is written by Liang Zhao
+% This function was written by Liang Zhao
 % https://github.com/mobo-d/MOEAD-EGO
 
     methods
         function main(Algorithm,Problem)
            %% Parameter setting
-            [q,maxIter,C0] = Algorithm.ParameterSet(5,50,0);
-            if C0 == 0
-                C0 = 11*Problem.D-1; % number of initial samples
-            end
+            q = Algorithm.ParameterSet(5);
+            C0 = 11*Problem.D-1; % number of initial samples
             
            %% Initial hyperparameters for GP
             GPModels = cell(1,Problem.M);   theta = cell(1,Problem.M);
@@ -50,7 +45,7 @@ classdef MOEADEGO < ALGORITHM
                 end 
               
               %% Step 2: Maximize ETI using MOEA/D and select q candidate points
-                SelectDecs     = Opt_ETI(Problem,GPModels,D_decs,D_objs,maxIter,q);
+                SelectDecs     = Opt_ETI(Problem,GPModels,D_decs,D_objs,q);
   
               %% Step 3： Aggregate data
                 D_pop = [D_pop,Problem.Evaluation(SelectDecs)];
