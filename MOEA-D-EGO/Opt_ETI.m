@@ -1,4 +1,4 @@
-function SelectDecs = Opt_ETI(Problem,model,D_decs,D_objs,maxIter,q)
+function SelectDecs = Opt_ETI(Problem,model,D_decs,D_objs,q)
 % Maximizing N Subproblems and Selecting Batch of Points 
 % Expected Tchebycheff Improvement (ETI)
 
@@ -15,7 +15,7 @@ function SelectDecs = Opt_ETI(Problem,model,D_decs,D_objs,maxIter,q)
 % Computational Intelligence Magazine, 2017, 12(4): 73-87".
 %--------------------------------------------------------------------------
 
-% This function is written by Liang Zhao.
+% This function was written by Liang Zhao.
 % https://github.com/mobo-d/MOEAD-EGO
 
    %% Generate the initial weight vectors
@@ -24,7 +24,7 @@ function SelectDecs = Opt_ETI(Problem,model,D_decs,D_objs,maxIter,q)
     [W, Problem.N]  = UniformPoint(Problem.N,Problem.M); % simplex-lattice design 
     
     %% Parameter setting for MOEA/D-DE
-    delta=0.9; nr = 2;
+    delta=0.9; nr = 2; maxIter = 50;
 
     %% update Z^*
     % zi is set as the minimum values of the predicted means obtained by the GP model of i-th objective
