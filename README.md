@@ -19,8 +19,6 @@ The Official Code of MOEA/D-EGO can be found in [this website](https://sites.goo
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"MOEA-D-EGO"**.
   * Default setting of `batch size q`: 5.
-  * Default setting of `maxIter`: 50. 
-  * If 'C0=0', the number of initial samples is set as 11*D-1. 
 * Select a problem and set appropriate parameters.
   * e.g., ZDT1, N=200, M=2, D=8, maxFE=200.
   * e.g., Inverted DTLZ2,  N=210, M=3, D=6, maxFE=300.
@@ -31,4 +29,4 @@ If you have any questions or feedback, please feel free to contact  liazhao5-c@m
 ## Acknowledgements
 * This implementation is based on [PlatEMO](https://github.com/BIMK/PlatEMO).
 * For GP modeling, we employe the [DACE toolbox](https://www.omicron.dk/dace.html).
-* For Design of Experiment methods, we utilize existing implementations from the [SURROGATES Toolbox](https://sites.google.com/site/felipeacviana/surrogates-toolbox).
+* For the Design of Experiment methods, we utilize existing implementations from the [SURROGATES Toolbox](https://sites.google.com/site/felipeacviana/surrogates-toolbox).
