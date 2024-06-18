@@ -1,4 +1,4 @@
-function  [y, or1, or2, dmse] = predictor(x, dmodel)
+function  [y, or1, or2, dmse] = Predictor(x, dmodel)
 %PREDICTOR  Predictor for y(x) using the given DACE model.
 %
 % Call:   y = predictor(x, dmodel)
