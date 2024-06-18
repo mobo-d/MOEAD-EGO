@@ -17,7 +17,7 @@ for id = 1:1:length(ins_list)
     M = Problem{1,2}; D = Problem{1,3}; maxFE = Problem{1,4};
     score      = [];
     IGDps       = [];
-    %% run DirHV-EGO
+    %% run MOEADEGO
     for i = 1 : n_run
         Pro = feval(prob_name,'M',M,'D',D,'maxFE',maxFE); 
         Alg = MOEADEGO('save',Inf,'run',i,'metName',{'IGDp'});
