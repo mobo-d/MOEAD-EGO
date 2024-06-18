@@ -1,4 +1,4 @@
-function  [dmodel, perf] = Dacefit(S, Y, regr, corr, theta0, lob, upb)
+function  [dmodel, perf] = dacefit(S, Y, regr, corr, theta0, lob, upb)
 %DACEFIT Constrained non-linear least-squares fit of a given correlation
 % model to the provided data set and regression model
 %
@@ -62,6 +62,8 @@ end
 % Normalize data
 mS = mean(S);   sS = std(S);
 mY = mean(Y);   sY = std(Y);
+% mS = 0;   sS = 1;
+% mY = 0;   sY = 1;
 % 02.08.27: Check for 'missing dimension'
 j = find(sS == 0);
 if  ~isempty(j),  sS(j) = 1; end
@@ -80,8 +82,8 @@ for k = 1 : m-1
   ij(ll,:) = [repmat(k, m-k, 1) (k+1 : m)']; % indices for sparse matrix
   D(ll,:) = repmat(S(k,:), m-k, 1) - S(k+1:m,:); % differences between points
 end
-% if  min(sum(abs(D),2) ) == 0
-%   error('Multiple design sites are not allowed'), end
+if  min(sum(abs(D),2) ) == 0
+  error('Multiple design sites are not allowed'), end
 
 % Regression matrix
 F = feval(regr, S);  [mF p] = size(F);
@@ -106,7 +108,7 @@ else
   if  isinf(f)
     error('Bad point.  Try increasing theta0'), end
 end
-
+[obj, ~] = objfunc(theta, par)
 % Return values
 dmodel = struct('regr',regr, 'corr',corr, 'theta',theta.', ...
   'beta',fit.beta, 'gamma',fit.gamma, 'sigma2',sY.^2.*fit.sigma2, ...
