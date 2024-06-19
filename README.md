@@ -12,7 +12,15 @@ The Java Code of MOEA/D-EGO (written by Wudong Liu) is avaliable at [this websit
 
 * An adaptive adjustment strategy for $z^*$ is used. More related discussions can be found in the [Supplementary File of DirHV-EGO](https://ieeexplore.ieee.org/document/10093980).  
 
-## Quick Start
+## Usage 
+
+Matlab >= 2018a
+
+### Quick Start
+
+* The `run_DirHV_EGO.m` provides the basic script to run experiments on ZDT and DTLZ.
+
+### Advanced usage
 
 * Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.2, Matlab 2020b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
 * Copy the folders named "**MOEA-D-EGO**" and "**dace-does**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path .
@@ -29,4 +37,4 @@ If you have any questions or feedback, please feel free to contact  liazhao5-c@m
 ## Acknowledgements
 * This implementation is based on [PlatEMO](https://github.com/BIMK/PlatEMO).
 * For GP modeling, we employe the [DACE toolbox](https://www.omicron.dk/dace.html).
-* For the Design of Experiment methods, we utilize existing implementations from the [SURROGATES Toolbox](https://sites.google.com/site/felipeacviana/surrogates-toolbox).
+ 
