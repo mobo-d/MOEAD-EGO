@@ -22,11 +22,11 @@ Matlab >= 2018a
 
 ### Advanced usage
 
-* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.2, Matlab 2020b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
-* Copy the folders named "**MOEA-D-EGO**" and "**dace-does**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path .
+* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.6) and read PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
+* Copy the folders within "**Algorithms**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"MOEA-D-EGO"**.
-  * Default setting of `batch size q`: 5.
+  * Default setting of `batch size`: 5.
 * Select a problem and set appropriate parameters.
   * e.g., ZDT1, N=200, M=2, D=8, maxFE=200.
   * e.g., Inverted DTLZ2,  N=210, M=3, D=6, maxFE=300.
