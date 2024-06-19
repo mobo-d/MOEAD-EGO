@@ -18,7 +18,7 @@ Matlab >= 2018a
 
 ### Quick Start
 
-* The `run_DirHV_EGO.m` provides the basic script to run experiments on ZDT and DTLZ.
+* The `run_MOEAD_EGO.m` provides the basic script to run experiments on ZDT and DTLZ.
 
 ### Advanced usage
 
