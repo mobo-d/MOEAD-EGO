@@ -2,12 +2,8 @@ function new_x = Opt_ETI(M,D,xlower,xupper,GPModels,Batch_size,train_x,train_y)
 % Maximizing N Subproblems and Selecting Batch of Points 
 % Expected Tchebycheff Improvement (ETI)
 
-%------------------------------- Reference --------------------------------
-% Q. Zhang, W. Liu, E. Tsang, and B. Virginas, Expensive multiobjective
-% optimization by MOEA/D with Gaussian process model, IEEE Transactions on
-% Evolutionary Computation, 2010, 14(3): 456-474.
 %------------------------------- Copyright --------------------------------
-% Copyright (c) 2021 BIMK Group. You are free to use the PlatEMO for
+% Copyright (c) 2024 BIMK Group. You are free to use the PlatEMO for
 % research purposes. All publications which use this platform or any code
 % in the platform should acknowledge the use of "PlatEMO" and reference "Ye
 % Tian, Ran Cheng, Xingyi Zhang, and Yaochu Jin, PlatEMO: A MATLAB platform
@@ -20,7 +16,7 @@ function new_x = Opt_ETI(M,D,xlower,xupper,GPModels,Batch_size,train_x,train_y)
 
    %% Generate the initial weight vectors
     % # of weight vectors：M = 2,  3,  4,  5,  6  
-    num_weights    =        [200,210,295,456,462]; 
+    num_weights = [200,210,295,456,462]; 
     if M <= 3
         [ref_vecs, ~]  = UniformPoint(num_weights(M-1),M); % simplex-lattice design 
     elseif M <= 6
@@ -30,8 +26,7 @@ function new_x = Opt_ETI(M,D,xlower,xupper,GPModels,Batch_size,train_x,train_y)
     end
   
     %% Estimate the Utopian point z
-    z       = min(train_y,[],1);
-    z       = get_estimation_z(D, xlower,xupper,GPModels,ref_vecs,z); 
+    z       = get_estimation_z(D, xlower,xupper,GPModels,ref_vecs,min(train_y,[],1)); 
     gmin    = get_gmin(train_y,ref_vecs,z); 
    
     %% Using MOEA/D-DE to Maximize ETI
@@ -52,30 +47,16 @@ function new_x = Opt_ETI(M,D,xlower,xupper,GPModels,Batch_size,train_x,train_y)
 end
  
 % >>>>>>>>>>>>>>>>   Auxiliary functions  ==================== 
-function SelectDecs = K_means_Batch_Select(Q,Batch_size,candidate_x,Q_ETI) 
-     batch_size = min(Batch_size,size(Q,1));% in case Q is smaller than Batch size
-    
-    if batch_size == 0
-        Qb = randperm(size(candidate_x,1),Batch_size);
-        SelectDecs = candidate_x(Qb,:);
-    else
-        cindex  = kmeans(Q,batch_size);
-        Qb = [];
-        for i = 1 : batch_size
-            index = find(cindex == i); 
-            [~,best] = max(Q_ETI(index));
-            Qb = [Qb,index(best)];
-        end
-        SelectDecs = Q(Qb,:);
+function gmin = get_gmin(D_objs,ref_vecs,z)
+% calculate the minimum of  Tch for each ref_vec
+% g(x|w,z) = max{w1(f1-z1),w2(f2-z2),...}
+    Objs_translated = D_objs-z; % n*M
+    G = ref_vecs(:,1)*Objs_translated(:,1)';  % N*n, f1
+    for j = 2:size(ref_vecs,2)
+        G = max(G,ref_vecs(:,j)*Objs_translated(:,j)'); % N*n, max(fi,fj)
     end
-    % when Q is smaller than batch size
-    if size(SelectDecs,1) < Batch_size
-        Qb = randperm(size(candidate_x,1), Batch_size - size(SelectDecs,1));
-        SelectDecs = [SelectDecs;candidate_x(Qb,:)];
-    end
-end
-
- 
+    gmin = min(G,[],2);  % N*1  one for each weight vector 
+end 
 
 function  [pop_ETI,pop_x,pop_mean,pop_std] = MOEAD_ETI(D,xlower,xupper,GPModels,ref_vecs,gmin,z) 
 %% using MOEA/D-GR to solve subproblems
@@ -121,18 +102,6 @@ function  [pop_ETI,pop_x,pop_mean,pop_std] = MOEAD_ETI(D,xlower,xupper,GPModels,
        end      
     end
 end
-
-function gmin = get_gmin(D_objs,ref_vecs,z)
-% calculate the minimum of  Tch for each ref_vec
-% g(x|w,z) = max{w1(f1-z1),w2(f2-z2),...}
-    Objs_translated = D_objs-z; % n*M
-    G = ref_vecs(:,1)*Objs_translated(:,1)';  % N*n, f1
-    for j = 2:size(ref_vecs,2)
-        G = max(G,ref_vecs(:,j)*Objs_translated(:,j)'); % N*n, max(fi,fj)
-    end
-    gmin = min(G,[],2);  % N*1  one for each weight vector 
-end 
-
 
 function  ETI = get_ETI(u,sigma,ref_vecs,Gbest,z)
 %     g(x|w,z) = max{w1(f1-z1),w2(f2-z2)}  
@@ -248,6 +217,7 @@ function  z = get_estimation_z(D, xlower,xupper,GPModels,ref_vecs,z)
        end      
     end
 end
+
 function [u] = GPEvaluate_mean(X,model)
 % Predict the GP posterior mean at a set of the candidate solutions 
     N = size(X,1); % number of samples
@@ -255,6 +225,29 @@ function [u] = GPEvaluate_mean(X,model)
     u = zeros(N,M); % predictive mean
     for j = 1 : M
         [u(:,j)] = Predictor(X,model{1,j}); % DACE Kriging toolbox
+    end
+end
+
+function SelectDecs = K_means_Batch_Select(Q,Batch_size,candidate_x,Q_ETI) 
+     batch_size = min(Batch_size,size(Q,1));% in case Q is smaller than Batch size
+    
+    if batch_size == 0
+        Qb = randperm(size(candidate_x,1),Batch_size);
+        SelectDecs = candidate_x(Qb,:);
+    else
+        cindex  = kmeans(Q,batch_size);
+        Qb = [];
+        for i = 1 : batch_size
+            index = find(cindex == i); 
+            [~,best] = max(Q_ETI(index));
+            Qb = [Qb,index(best)];
+        end
+        SelectDecs = Q(Qb,:);
+    end
+    % when Q is smaller than batch size
+    if size(SelectDecs,1) < Batch_size
+        Qb = randperm(size(candidate_x,1), Batch_size - size(SelectDecs,1));
+        SelectDecs = [SelectDecs;candidate_x(Qb,:)];
     end
 end
 % >>>>>>>>>>>>>>>>    functions in PlatEMO ====================
@@ -302,6 +295,5 @@ function Offspring = operator_DE(Parent1,Parent2,Parent3, xlower,xupper)
                       (1-(Offspring(temp)-Lower(temp))./(Upper(temp)-Lower(temp))).^(disM+1)).^(1/(disM+1))-1);
     temp = Site & mu>0.5; 
     Offspring(temp) = Offspring(temp)+(Upper(temp)-Lower(temp)).*(1-(2.*(1-mu(temp))+2.*(mu(temp)-0.5).*...
-                      (1-(Upper(temp)-Offspring(temp))./(Upper(temp)-Lower(temp))).^(disM+1)).^(1/(disM+1)));
- 
+                      (1-(Upper(temp)-Offspring(temp))./(Upper(temp)-Lower(temp))).^(disM+1)).^(1/(disM+1))); 
 end

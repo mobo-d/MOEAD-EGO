@@ -5,7 +5,8 @@ function ETI = get_exact_ETI(u,sigma,ref_vecs,Gbest,z)
 % sigma   : N*M  square root of the predictive variance
 % ref_vecs: N*M  weight vectors 
 % Gbest   : N*1  
-% z       : 1*M  reference point   
+% z       : 1*M  reference point  
+
 %------------------------------- Reference --------------------------------
 % L. Zhao and Q. Zhang, Exact Formulas  for the Computation of Expected 
 % Tchebycheff Improvement. Proceedings of the IEEE Congress on Evolutionary 
@@ -13,6 +14,7 @@ function ETI = get_exact_ETI(u,sigma,ref_vecs,Gbest,z)
 %--------------------------------------------------------------------------
 % This function was written by Liang Zhao
 % https://github.com/mobo-d/MOEAD-EGO
+
     g_mu = ref_vecs.*(u - repmat(z,size(u,1),1));% N*M
     g_sig = ref_vecs.*sigma; % N*M
     [n,M] = size(g_mu); ETI = zeros(n,1);
@@ -56,6 +58,5 @@ function ETI = get_exact_ETI(u,sigma,ref_vecs,Gbest,z)
                   end
             end
         end
-    end
-    
+    end   
 end
