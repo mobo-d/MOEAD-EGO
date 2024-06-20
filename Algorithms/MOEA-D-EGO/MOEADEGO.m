@@ -23,7 +23,7 @@ classdef MOEADEGO < ALGORITHM
             %% Parameter setting
             batch_size = Algorithm.ParameterSet(5); 
             % number of initial samples
-            n_init = 11*D-1; 
+            n_init = 11*Problem.D-1;
             % Initial hyperparameters for GP
             theta = repmat({(n_init ^ (-1 ./ n_init)) .* ones(1, Problem.D)}, 1, Problem.M);
 
