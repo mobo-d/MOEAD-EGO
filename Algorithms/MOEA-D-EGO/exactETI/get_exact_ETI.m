@@ -43,17 +43,20 @@ function ETI = get_exact_ETI(u,sigma,ref_vecs,Gbest,z)
             for j=1:1:n 
                   Sigma_k =L_k*diag(g_sig2(j,:))*L_k'; % The covariance matrix of Z^(k) for j-th query, m*m
                   % P(Z^k<=b^k)
-                  p_k  =   qsimvnv(200*M,Sigma_k, -inf.*ones(M,1), (b_k(j,:)-mu_k(j,:))') ; 
+                  bk_minus_muk = (b_k(j,:)-mu_k(j,:))';%m*1
+                  % p_k  =   qsimvnv(200*M,Sigma_k, -inf.*ones(M,1), bk_minus_muk) ; 
+                  p_k = mvncdf(bk_minus_muk',zeros(1,M),Sigma_k);% 1*m
                   ETI(j) =  ETI(j)+ p_k *(Gbest(j)-mu_k(j,k));
 
-                  temp_ci = (b_k(j,:) -mu_k(j,:))'./diag(Sigma_k);%m*1
+                  temp_ci = bk_minus_muk./diag(Sigma_k);%m*1
                   temp_Sigma_k_ii = sqrt(diag(Sigma_k));
-                  phi_ik =   Sigma_k(:,k).*normpdf((b_k(j,:) -mu_k(j,:))'./temp_Sigma_k_ii)./temp_Sigma_k_ii;%m*1
+                  phi_ik =   Sigma_k(:,k).*normpdf(bk_minus_muk./temp_Sigma_k_ii)./temp_Sigma_k_ii;%m*1
                   for i=1:M
                         % need c.i^(k) and Sigma.i^(k)
-                        cik =  b_k(j,:)'  - mu_k(j,:)' -Sigma_k(:,i).* temp_ci ; cik(i)=[]; % m-1*1
-                        sigmaik =  (Sigma_k - Sigma_k(:,i)*Sigma_k(i,:)./Sigma_k(i,i)) ;  sigmaik(i,:)=[]; sigmaik(:,i)=[]; % m-1*1
-                        Phi_ik =   qsimvnv(200*M,sigmaik ,-inf.*ones(M-1,1),cik ) ; %1*1
+                        cik =  bk_minus_muk - Sigma_k(:,i).* temp_ci(i) ; cik(i)=[]; % m-1*1
+                        sigmaik =  (Sigma_k - Sigma_k(:,i)*Sigma_k(i,:)./Sigma_k(i,i)) ;  sigmaik(i,:)=[]; sigmaik(:,i)=[]; % m-1*m-1
+                        % Phi_ik =   qsimvnv(200*M,sigmaik ,-inf.*ones(M-1,1),cik ) ; %1*m-1
+                        Phi_ik = mvncdf(cik',zeros(1,M-1),sigmaik);%1*M-1
                         ETI(j) =  ETI(j) +  phi_ik(i)*Phi_ik;
                   end
             end
